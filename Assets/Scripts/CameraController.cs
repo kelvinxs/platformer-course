@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var height = Mathf.Clamp(target.position.y, minHeight, maxHeight);
+        var height = Mathf.Clamp(target.position.y + offset.y, minHeight, maxHeight);
         transform.position = new Vector3(target.position.x + offset.x, height, transform.position.z);
 
         var amountToMove = transform.position - _lastPosition;

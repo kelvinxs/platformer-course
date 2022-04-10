@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5.0f;
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float distGroundToJump = .01f;
+    [SerializeField] private float knockbackDurationInSeconds = 2f;
+    [SerializeField] private float knockbackForce = 10f;
 
     private Rigidbody2D _rigidbodyRef;
     private Collider2D _collider2DRef;
@@ -13,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer _spriteRendererRef;
 
     private int _jumpCount = 0;
+    private float _knockbackCounter = 0f;
 
     void Start()
     {
@@ -23,6 +26,22 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update()
+    {
+        if (_knockbackCounter <= 0)
+        {
+            Movement();
+        }
+        else
+        {
+            _knockbackCounter -= Time.deltaTime;
+            if (_knockbackCounter <= 0)
+            {
+                _animatorRef.SetBool("IsHurt", false);
+            }
+        }
+    }
+
+    private void Movement()
     {
         _rigidbodyRef.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), _rigidbodyRef.velocity.y);
         
@@ -67,5 +86,14 @@ public class PlayerController : MonoBehaviour
             bounds.extents.y + distGroundToJump, LayerMask.GetMask("Ground"));
 
         return dist;
+    }
+
+    public void Knockback()
+    {
+        _knockbackCounter = knockbackDurationInSeconds;
+        var yForce = knockbackForce * (_rigidbodyRef.velocity.y <= .001 ? 1 : -1);
+        var xForce = knockbackForce * (_spriteRendererRef.flipX ? 1 : -1);
+        _rigidbodyRef.velocity = new Vector2(xForce, yForce);
+        _animatorRef.SetBool("IsHurt", true);
     }
 }
