@@ -8108,7 +8108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4835754253538865466, guid: 853b83dad47899246a29816c747c2057, type: 3}
       propertyPath: invincibilityDurationInSeconds
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8048820804688823824, guid: 853b83dad47899246a29816c747c2057, type: 3}
       propertyPath: knockbackForce
